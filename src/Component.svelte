@@ -1,5 +1,5 @@
 <script>
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, onMount } from 'svelte';
 
   let wrapper;
   let observe;
@@ -11,10 +11,10 @@
   const dispatch = createEventDispatcher();
 
   onMount(() => {
-    if (typeof IntersectionObserver !== "undefined") {
+    if (typeof IntersectionObserver !== 'undefined') {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((singleEntry) => {
-          dispatch("intersecting", singleEntry);
+          dispatch('intersecting', singleEntry);
           entry = singleEntry;
           if (entry.isIntersecting) {
             inView = true;
