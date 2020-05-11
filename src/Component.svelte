@@ -5,8 +5,13 @@
   let observe;
   let unobserve;
   let entry;
-
   let inView = false;
+
+  export let options = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0,
+  };
 
   const dispatch = createEventDispatcher();
 
@@ -22,7 +27,7 @@
             inView = false;
           }
         });
-      });
+      }, options);
 
       observe = observer.observe;
       unobserve = observer.unobserve;
