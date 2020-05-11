@@ -5,10 +5,13 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "rollup -c",
+    "format": "prettier --write --plugin-search-dir=. src/**/*.svelte",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^6.0.0",
+    "prettier": "^2.0.5",
+    "prettier-plugin-svelte": "^1.0.0",
     "rollup": "^1.20.0",
     "rollup-plugin-svelte": "^5.0.0",
     "svelte": "^3.0.0"
