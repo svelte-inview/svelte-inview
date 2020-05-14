@@ -15,7 +15,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "rollup -c",
-    "format": "prettier --write --plugin-search-dir=. src/**/*.svelte",
+    "format": "prettier --write --plugin-search-dir=. *.js src/**/*.svelte",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {

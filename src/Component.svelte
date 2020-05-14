@@ -6,31 +6,74 @@
   let unobserve;
   let entry;
   let inView = false;
-
-  export let options = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0,
+  let wrapperClass = '';
+  let prevPos = {
+    x: undefined,
+    y: undefined,
   };
+  let scrollDirection = {
+    vertical: undefined,
+    horizontal: undefined,
+  };
+
+  export let root = null;
+  export let rootMargin = '0px';
+  export let threshold = 0;
+  export let unobserveOnEnter = false;
+  export { wrapperClass as class };
 
   const dispatch = createEventDispatcher();
 
   onMount(() => {
     if (typeof IntersectionObserver !== 'undefined') {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((singleEntry) => {
-          dispatch('intersecting', singleEntry);
-          entry = singleEntry;
-          if (entry.isIntersecting) {
-            inView = true;
-          } else {
-            inView = false;
-          }
-        });
-      }, options);
+      const observer = new IntersectionObserver(
+        (entries, observer) => {
+          observe = observer.observe;
+          unobserve = observer.unobserve;
 
-      observe = observer.observe;
-      unobserve = observer.unobserve;
+          entries.forEach((singleEntry) => {
+            entry = singleEntry;
+
+            if (prevPos.y > entry.boundingClientRect.y) {
+              scrollDirection.vertical = 'up';
+            } else {
+              scrollDirection.vertical = 'down';
+            }
+
+            if (prevPos.x > entry.boundingClientRect.x) {
+              scrollDirection.horizontal = 'left';
+            } else {
+              scrollDirection.horizontal = 'right';
+            }
+
+            prevPos.y = entry.boundingClientRect.y;
+            prevPos.x = entry.boundingClientRect.x;
+            dispatch('change', { entry, scrollDirection, observe, unobserve });
+
+            if (entry.isIntersecting) {
+              inView = true;
+              dispatch('enter', {
+                inView,
+                entry,
+                scrollDirection,
+                observe,
+                unobserve,
+              });
+              unobserveOnEnter && observer.unobserve(wrapper);
+            } else {
+              inView = false;
+              dispatch('leave', {
+                inView,
+                entry,
+                scrollDirection,
+                observe,
+                unobserve,
+              });
+            }
+          });
+        },
+        { root, rootMargin, threshold }
+      );
 
       observer.observe(wrapper);
       return () => observer.unobserve(wrapper);
@@ -45,15 +88,6 @@
   }
 </style>
 
-<div bind:this={wrapper}>
-  <slot {inView} {observe} {unobserve} {entry} />
+<div bind:this={wrapper} class={wrapperClass || ''}>
+  <slot {inView} {observe} {unobserve} />
 </div>
-
-<!-- +++++++++++++++++++++++++++++++++++++++++++++++++ TODO: expose inView and IO Entry(with entry info) props +++++++++++++++++++++++++++++++++++++++++++++++++-->
-<!-- TODO: pass IO props-->
-<!-- TODO: expose add events -> onChange, onEnter, onLeave-->
-<!-- TODO: add scrollDirection detection -->
-<!-- TODO: add unobserveOnEnter -->
-<!-- +++++++++++++++++++++++++++++++++++++++++++++++++ TODO: expose observe and unObserve methods ++++++++++++++++++++++++++++++++++++++++++++++++++-->
-<!-- TODO: in future handle IO v2 -->
-<!-- TODO: add demo and examples in readme -->
