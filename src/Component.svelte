@@ -1,7 +1,6 @@
 <script>
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { createEventDispatcher, onMount, tick } from 'svelte';
 
-  let wrapper;
   let observe;
   let unobserve;
   let entry;
@@ -15,18 +14,20 @@
     vertical: undefined,
     horizontal: undefined,
   };
+  let observer;
 
+  export let wrapper;
   export let root = null;
   export let rootMargin = '0px';
   export let threshold = 0;
   export let unobserveOnEnter = false;
-  export { wrapperClass as class };
 
   const dispatch = createEventDispatcher();
 
-  onMount(() => {
-    if (typeof IntersectionObserver !== 'undefined') {
-      const observer = new IntersectionObserver(
+  onMount(async () => {
+    await tick();
+    if (typeof IntersectionObserver !== 'undefined' && wrapper && !observer) {
+      observer = new IntersectionObserver(
         (entries, observer) => {
           observe = observer.observe;
           unobserve = observer.unobserve;
@@ -81,13 +82,4 @@
   });
 </script>
 
-<style>
-  div {
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div bind:this={wrapper} class={wrapperClass || ''}>
-  <slot {inView} {observe} {unobserve} />
-</div>
+<slot {inView} {observe} {unobserve} />
