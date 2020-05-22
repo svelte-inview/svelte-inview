@@ -82,4 +82,4 @@
   });
 </script>
 
-<slot {inView} {observe} {unobserve} />
+<slot {inView} />
