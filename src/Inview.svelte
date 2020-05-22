@@ -82,4 +82,4 @@
   });
 </script>
 
-<slot {inView} />
+<slot {inView} {scrollDirection} />
