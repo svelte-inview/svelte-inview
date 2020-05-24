@@ -4,6 +4,8 @@ A Svelte component that monitors an element enters or leaves the viewport/parent
 
 <img src="demo/public/demo.gif" width="600px" align="center">
 
+🔥Check it out live [here](https://svelte-inview.netlify.app/)
+
 ## Why bother?
 - 👓️Watch for any element that enters or leaves the viewport (or another wrapper/parent element).
 - 🏎️Thanks to using [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), Svelte Inview is blazing fast and doesn't block the main thread.
