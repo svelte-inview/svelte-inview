@@ -49,12 +49,17 @@
 
             prevPos.y = entry.boundingClientRect.y;
             prevPos.x = entry.boundingClientRect.x;
-            dispatch('change', { entry, scrollDirection, observe, unobserve });
+            dispatch('change', {
+              inView,
+              entry,
+              scrollDirection,
+              observe,
+              unobserve,
+            });
 
             if (entry.isIntersecting) {
               inView = true;
               dispatch('enter', {
-                inView,
                 entry,
                 scrollDirection,
                 observe,
@@ -64,7 +69,6 @@
             } else {
               inView = false;
               dispatch('leave', {
-                inView,
                 entry,
                 scrollDirection,
                 observe,
