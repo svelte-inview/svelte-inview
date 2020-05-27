@@ -2,7 +2,7 @@
 
 A Svelte component that monitors an element enters or leaves the viewport/parent element. Performant and efficient thanks to using [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) under the hood. Can be used in multiple projects including lazy loading images, infinite scrolling, playing/pausing the video when in the viewport, tracking user behaviour firing link pre-fetching and animations and many many more.
 
-<img src="demo/public/demo.gif" width="600px" align="center">
+<img src="https://raw.githubusercontent.com/maciekgrzybek/svelte-inview/master/demo/public/demo.gif" width="600px" align="center">
 
 🔥Check it out live [here](https://svelte-inview.netlify.app/)
 
@@ -161,7 +161,7 @@ You can also add some cool animations when an element enters the viewport. To ma
 ### Usage with rootMargin
 If you want to increase or decrease the area of the root, just pass the `rootMargin`. On the image below you can see the blue area being the `root`. It means that every time, the target element will enter or leave that area (or meet the specified threshold), a callback will be fired.
 
-![Usage of rootMargin](demo/public/rootMargin.jpg)
+![Usage of rootMargin](https://raw.githubusercontent.com/maciekgrzybek/svelte-inview/master/demo/public/rootMargin.jpg)
 
 ## License
 Distributed under the MIT License. See `LICENSE` for more information.

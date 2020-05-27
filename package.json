@@ -1,6 +1,6 @@
 {
   "name": "svelte-inview",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "A Svelte component that monitors an element enters or leaves the viewport or a parent element. Performant and efficient thanks to using Intersection Observer under the hood.",
   "homepage": "https://github.com/maciekgrzybek/svelte-inview",
   "bugs": "https://github.com/maciekgrzybek/svelte-inview/issues",
@@ -23,6 +23,7 @@
     "eslint": "^7.0.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-svelte3": "^2.7.3",
+    "eslint-plugin-prettier": "^3.1.3",
     "husky": "^4.2.5",
     "prettier": "^2.0.5",
     "prettier-plugin-svelte": "^1.0.0",
@@ -31,15 +32,12 @@
     "svelte": "^3.0.0"
   },
   "keywords": [
-    "svelte"
+    "svelte", "observer", "observing", "intersection", "viewport", "inviewport", "in-view", "in-viewport", "inview", "observe", "waypoint", "intersection-observer", "intersection-observer-api", "performance", "monitor", "scroll-direction", "scroll", "direction", "lazy", "lazy-loading", "scrolling", "animations", "compile", "compiler", "root", "root-margin", "threshold", "visibility", "visible", "infinite-scrolling", "infinite", "scrolling", "intersecting", "async", "asynchronously", "asynchronous", "preload", "detect"
   ],
   "files": [
     "src",
     "dist"
   ],
-  "dependencies": {
-    "eslint-plugin-prettier": "^3.1.3"
-  },
   "husky": {
     "hooks": {
       "pre-commit": "npm run format"
