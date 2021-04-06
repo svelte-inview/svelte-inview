@@ -1,8 +1,6 @@
 <script>
   import Icon from './Icon.svelte';
   import Arrow from './Arrow.svelte';
-  import { flip } from 'svelte/animate';
-  import { afterUpdate, beforeUpdate, tick } from 'svelte';
 
   const icons = [
     'caravan',
@@ -40,6 +38,33 @@
     }
   };
 </script>
+
+<div class="wrapper">
+  <div class="header">
+    <div class="text-wrapper">
+      <span>Currently on the screen:</span>
+      <img src={`icons/${current}.svg`} class="small-icon" alt={current} />
+      <Arrow active={direction === 'up'} bind:this={arrowUp} />
+      <Arrow
+        direction="down"
+        active={direction === 'down'}
+        bind:this={arrowDown}
+      />
+    </div>
+  </div>
+</div>
+
+{#each icons as icon}
+  <Icon {icon} on:entry={handleEntry} />
+{/each}
+
+<a
+  href="https://github.com/maciekgrzybek/svelte-inview"
+  class="github"
+  target="_blank"
+>
+  <img src="icons/github.svg" alt="github" />
+</a>
 
 <style>
   .wrapper {
@@ -80,30 +105,3 @@
     height: 30px;
   }
 </style>
-
-<div class="wrapper">
-  <div class="header">
-    <div class="text-wrapper">
-      <span>Currently on the screen:</span>
-      <img src={`icons/${current}.svg`} class="small-icon" alt={current} />
-      <Arrow active={direction === 'up'} bind:this={arrowUp} />
-      <Arrow
-        direction="down"
-        active={direction === 'down'}
-        bind:this={arrowDown} />
-    </div>
-
-  </div>
-
-</div>
-
-{#each icons as icon}
-  <Icon {icon} on:entry={handleEntry} />
-{/each}
-
-<a
-  href="https://github.com/maciekgrzybek/svelte-inview"
-  class="github"
-  target="_blank">
-  <img src="icons/github.svg" alt="github" />
-</a>

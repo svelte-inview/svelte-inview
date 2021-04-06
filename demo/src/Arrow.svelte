@@ -1,21 +1,10 @@
+<svelte:options accessors={true} />
+
 <script>
   export let direction = 'up';
   export let active;
   export let ref;
 </script>
-
-<style>
-  svg {
-    fill: lightgray;
-    transition: fill 0.3s;
-  }
-
-  .active {
-    fill: lime;
-  }
-</style>
-
-<svelte:options accessors={true} />
 
 {#if direction === 'up'}
   <svg
@@ -28,7 +17,8 @@
     fill-rule="evenodd"
     clip-rule="evenodd"
     stroke-linejoin="round"
-    stroke-miterlimit="2">
+    stroke-miterlimit="2"
+  >
     <path
       d="M284.582 464.344l-.168.768V135.888l103.724 103.496c5.064 5.068 11.924
       7.848 19.124 7.848 7.2 0 14.012-2.78
@@ -39,7 +29,8 @@
       16.104c5.056 5.068 11.808 7.848 19.008 7.848 7.196 0 13.592-2.78
       18.652-7.848L207.594 134.72v329.992c0 14.828 12.78 27.288 27.6
       27.288h22.788c14.82 0 26.6-12.828 26.6-27.656z"
-      fill-rule="nonzero" />
+      fill-rule="nonzero"
+    />
   </svg>
 {:else}
   <svg
@@ -52,7 +43,8 @@
     fill-rule="evenodd"
     clip-rule="evenodd"
     stroke-linejoin="round"
-    stroke-miterlimit="2">
+    stroke-miterlimit="2"
+  >
     <path
       d="M207.418 27.656l.168-.768v329.224L103.862
       252.616c-5.064-5.068-11.924-7.848-19.124-7.848-7.2 0-14.012 2.78-19.088
@@ -64,6 +56,18 @@
       0-13.592 2.78-18.652 7.848L284.406
       357.28V27.288c0-14.828-12.78-27.288-27.6-27.288h-22.788c-14.82 0-26.6
       12.828-26.6 27.656z"
-      fill-rule="nonzero" />
+      fill-rule="nonzero"
+    />
   </svg>
 {/if}
+
+<style>
+  svg {
+    fill: lightgray;
+    transition: fill 0.3s;
+  }
+
+  .active {
+    fill: lime;
+  }
+</style>

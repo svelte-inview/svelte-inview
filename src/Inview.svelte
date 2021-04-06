@@ -51,7 +51,7 @@
             prevPos.x = entry.boundingClientRect.x;
 
             inView = entry.isIntersecting;
-            
+
             dispatch('change', {
               inView,
               entry,
