@@ -1,11 +1,11 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher, onMount, tick } from 'svelte';
 
   let observe;
   let unobserve;
   let entry;
   let inView = false;
-  let wrapperClass = '';
+
   let prevPos = {
     x: undefined,
     y: undefined,
