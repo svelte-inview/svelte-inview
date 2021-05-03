@@ -1,7 +1,7 @@
 {
   "name": "svelte-inview",
-  "version": "1.0.0",
-  "description": "A Svelte component that monitors an element enters or leaves the viewport or a parent element. Performant and efficient thanks to using Intersection Observer under the hood.",
+  "version": "2.0.0",
+  "description": "A Svelte action that monitors an element enters or leaves the viewport or a parent element. Performant and efficient thanks to using Intersection Observer under the hood.",
   "homepage": "https://github.com/maciekgrzybek/svelte-inview",
   "bugs": "https://github.com/maciekgrzybek/svelte-inview/issues",
   "license": "MIT",
@@ -10,12 +10,12 @@
     "name": "Maciek Grzybek",
     "url": "https://maciekgrzybek.dev"
   },
-  "svelte": "src/index.js",
+  "svelte": "dist/index.js",
   "module": "dist/index.mjs",
   "main": "dist/index.js",
   "scripts": {
     "build": "rollup -c",
-    "format": "prettier --write --plugin-search-dir=. *.js src/**/*.svelte demo/**/*.svelte",
+    "format": "prettier --write --plugin-search-dir=. *.js src/**/*.ts demo/**/*.svelte",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {

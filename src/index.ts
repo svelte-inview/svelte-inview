@@ -1,1 +1,1 @@
-export { default } from './Inview.svelte';
+export { inview } from './inview';

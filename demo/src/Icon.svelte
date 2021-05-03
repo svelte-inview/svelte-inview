@@ -1,5 +1,5 @@
 <script>
-  import Inview from 'svelte-inview';
+  import { inview } from 'svelte-inview';
   import { createEventDispatcher } from 'svelte';
 
   let ref;
@@ -8,20 +8,19 @@
   const dispatch = createEventDispatcher();
 </script>
 
-<Inview
-  wrapper={ref}
+<div
+  class="icon-wrapper"
+  use:inview={{ threshold: 0.5 }}
   on:enter={({ detail }) =>
     dispatch('entry', {
       verticalDirection: detail.scrollDirection.vertical,
       icon,
     })}
-  threshold={0.5}
 >
-  <div class="icon-wrapper">
-    <img src={`icons/${icon}.svg`} alt={icon} bind:this={ref} />
-  </div>
-</Inview>
+  <img src={`icons/${icon}.svg`} alt={icon} bind:this={ref} />
+</div>
 
+<!-- </Inview> -->
 <style>
   .icon-wrapper {
     height: 100vh;
