@@ -33,7 +33,7 @@ $ npm install --save svelte-inview
 
 ## Usage
 
-#### NOTE: Version 1 was using an `Inview` component. In version 2 that was changed to `action` - API is easier to consume, plus hte obsolete wrapper is not longer needed. If you still want to use the component, [check the documentation for version 1](https://github.com/maciekgrzybek/svelte-inview/tree/v-1.0.0).
+#### NOTE: Version 1 was using an `Inview` component. In version 2 that was changed to `action` - API is easier to consume, plus the obsolete wrapper is not longer needed. If you still want to use the component, [check the documentation for version 1](https://github.com/maciekgrzybek/svelte-inview/tree/v-1.0.0).
 
 ### Basic Use Case
 
