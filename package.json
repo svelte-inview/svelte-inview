@@ -10,7 +10,6 @@
     "name": "Maciek Grzybek",
     "url": "https://maciekgrzybek.dev"
   },
-  "svelte": "src/index.ts",
   "module": "dist/index.mjs",
   "main": "dist/index.js",
   "scripts": {
