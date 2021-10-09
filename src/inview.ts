@@ -1,21 +1,4 @@
-interface Options {
-  root?: HTMLElement | null;
-  rootMargin?: string;
-  threshold?: number | number[];
-  unobserveOnEnter: boolean;
-}
-
-type Direction = 'up' | 'down' | 'left' | 'right';
-
-interface Position {
-  x?: number;
-  y?: number;
-}
-
-interface ScrollDirection {
-  vertical?: Direction;
-  horizontal?: Direction;
-}
+import type { Options, Position, ScrollDirection } from './types';
 
 const defaultOptions: Options = {
   root: null,
@@ -95,7 +78,7 @@ export function inview(node: HTMLElement, options: Options) {
               })
             );
 
-            options.unobserveOnEnter && _observer.unobserve(node);
+            actionOptions.unobserveOnEnter && _observer.unobserve(node);
           } else {
             inView = false;
             node.dispatchEvent(
