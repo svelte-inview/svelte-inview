@@ -1,4 +1,5 @@
-type Direction = 'up' | 'down' | 'left' | 'right';
+
+export type Event = 'change' | 'leave' | 'enter';
 
 export type Options = {
   root?: HTMLElement | null;
@@ -12,7 +13,18 @@ export type Position = {
   y?: number;
 };
 
+// Types below needs to be manually copied to additional-svelte.jsx.d.ts file - more details there
+type Direction = 'up' | 'down' | 'left' | 'right';
+
 export type ScrollDirection = {
   vertical?: Direction;
   horizontal?: Direction;
+};
+
+export type Detail = {
+  inView: boolean;
+  entry: IntersectionObserverEntry;
+  scrollDirection: ScrollDirection;
+  observe: (target: Element) => void;
+  unobserve: (target: Element) => void;
 };

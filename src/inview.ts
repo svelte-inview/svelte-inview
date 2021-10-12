@@ -1,4 +1,10 @@
-import type { Options, Position, ScrollDirection } from './types';
+import type {
+  Detail,
+  Options,
+  Position,
+  ScrollDirection,
+  Event,
+} from './types';
 
 const defaultOptions: Options = {
   root: null,
@@ -7,8 +13,11 @@ const defaultOptions: Options = {
   unobserveOnEnter: false,
 };
 
+const createEvent = (name: Event, detail: Detail): CustomEvent<Detail> =>
+  new CustomEvent(name, { detail });
+
 export function inview(node: HTMLElement, options: Options) {
-  const actionOptions: Options = {
+  const { root, rootMargin, threshold, unobserveOnEnter }: Options = {
     ...defaultOptions,
     ...options,
   };
@@ -22,8 +31,6 @@ export function inview(node: HTMLElement, options: Options) {
     vertical: undefined,
     horizontal: undefined,
   };
-
-  let inView = false;
 
   if (typeof IntersectionObserver !== 'undefined' && node) {
     const observer = new IntersectionObserver(
@@ -46,59 +53,34 @@ export function inview(node: HTMLElement, options: Options) {
             scrollDirection.horizontal = 'right';
           }
 
-          prevPos.y = entry.boundingClientRect.y;
-          prevPos.x = entry.boundingClientRect.x;
+          prevPos = {
+            y: entry.boundingClientRect.y,
+            x: entry.boundingClientRect.x,
+          };
 
-          inView = entry.isIntersecting;
+          const detail: Detail = {
+            inView: entry.isIntersecting,
+            entry,
+            scrollDirection,
+            observe,
+            unobserve,
+          };
 
-          node.dispatchEvent(
-            new CustomEvent('change', {
-              detail: {
-                inView,
-                entry,
-                scrollDirection,
-                observe,
-                unobserve,
-              },
-            })
-          );
+          node.dispatchEvent(createEvent('change', detail));
 
           if (entry.isIntersecting) {
-            inView = true;
+            node.dispatchEvent(createEvent('enter', detail));
 
-            node.dispatchEvent(
-              new CustomEvent('enter', {
-                detail: {
-                  inView,
-                  entry,
-                  scrollDirection,
-                  observe,
-                  unobserve,
-                },
-              })
-            );
-
-            actionOptions.unobserveOnEnter && _observer.unobserve(node);
+            unobserveOnEnter && _observer.unobserve(node);
           } else {
-            inView = false;
-            node.dispatchEvent(
-              new CustomEvent('leave', {
-                detail: {
-                  inView,
-                  entry,
-                  scrollDirection,
-                  observe,
-                  unobserve,
-                },
-              })
-            );
+            node.dispatchEvent(createEvent('leave', detail));
           }
         });
       },
       {
-        root: actionOptions.root,
-        rootMargin: actionOptions.rootMargin,
-        threshold: actionOptions.threshold,
+        root,
+        rootMargin,
+        threshold,
       }
     );
 

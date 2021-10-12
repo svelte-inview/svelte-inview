@@ -12,6 +12,7 @@
   },
   "module": "dist/index.mjs",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup -c",
     "format": "prettier --write --plugin-search-dir=. *.js src/**/*.ts demo/**/*.svelte",
@@ -30,6 +31,7 @@
     "prettier": "^2.0.5",
     "prettier-plugin-svelte": "^2.2.0",
     "rollup": "^2.44.0",
+    "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-svelte": "^7.1.0",
     "svelte": "^3.37.0",
     "svelte-check": "^1.5.2",
@@ -86,6 +88,7 @@
     }
   },
   "dependencies": {
+    "rollup-plugin-typescript2": "^0.30.0",
     "tslib": "^2.2.0"
   }
 }
