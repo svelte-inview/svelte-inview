@@ -2,6 +2,7 @@ import svelte from 'rollup-plugin-svelte';
 import resolve from '@rollup/plugin-node-resolve';
 import autoPreprocess from 'svelte-preprocess';
 import typescript from 'rollup-plugin-typescript2';
+import copy from 'rollup-plugin-copy';
 
 import pkg from './package.json';
 
@@ -16,5 +17,17 @@ export default {
     { file: pkg.module, format: 'es' },
     { file: pkg.main, format: 'umd', name },
   ],
-  plugins: [svelte({ preprocess: autoPreprocess() }), resolve(), typescript()],
+  plugins: [
+    svelte({ preprocess: autoPreprocess() }),
+    resolve(),
+    typescript(),
+    copy({
+      targets: [
+        {
+          src: ['src/additional-svelte-jsx.d.ts', 'src/index.d.ts'],
+          dest: 'dist',
+        },
+      ],
+    }),
+  ],
 };
