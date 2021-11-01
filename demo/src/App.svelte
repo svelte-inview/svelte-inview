@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Icon from './Icon.svelte';
   import Arrow from './Arrow.svelte';
 

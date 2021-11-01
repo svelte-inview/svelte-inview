@@ -1,4 +1,3 @@
-
 export type Event = 'change' | 'leave' | 'enter';
 
 export type Options = {
