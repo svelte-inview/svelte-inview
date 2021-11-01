@@ -61,7 +61,7 @@ This is the most basic use case for `svelte-inview`. Just add the action to the 
     on:leave={(event) => {
       const { inView, entry, scrollDirection, observe, unobserve } = event.detail;
       isInView = inView;
-    }}>>{isInView ? 'Hey I am in the viewport' : 'Bye, Bye'}</div>
+    }}>{isInView ? 'Hey I am in the viewport' : 'Bye, Bye'}</div>
 ```
 
 ### Lazy Loading Images
