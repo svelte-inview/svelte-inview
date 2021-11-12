@@ -1,10 +1,10 @@
-export type Event = 'change' | 'leave' | 'enter';
+export type Event = 'change' | 'leave' | 'enter' | 'init';
 
 export type Options = {
   root?: HTMLElement | null;
   rootMargin?: string;
   threshold?: number | number[];
-  unobserveOnEnter: boolean;
+  unobserveOnEnter?: boolean;
 };
 
 export type Position = {
@@ -20,10 +20,15 @@ export type ScrollDirection = {
   horizontal?: Direction;
 };
 
-export type Detail = {
+export type ObserverEventDetails = {
   inView: boolean;
   entry: IntersectionObserverEntry;
   scrollDirection: ScrollDirection;
   observe: (target: Element) => void;
   unobserve: (target: Element) => void;
+};
+
+export type LifecycleEventDetails = {
+  node: HTMLElement;
+  observer: IntersectionObserver;
 };

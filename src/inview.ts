@@ -1,9 +1,10 @@
 import type {
-  Detail,
+  ObserverEventDetails,
   Options,
   Position,
   ScrollDirection,
   Event,
+  LifecycleEventDetails,
 } from './types';
 
 const defaultOptions: Options = {
@@ -13,10 +14,12 @@ const defaultOptions: Options = {
   unobserveOnEnter: false,
 };
 
-const createEvent = (name: Event, detail: Detail): CustomEvent<Detail> =>
-  new CustomEvent(name, { detail });
+const createEvent = <T = ObserverEventDetails>(
+  name: Event,
+  detail: T
+): CustomEvent<T> => new CustomEvent(name, { detail });
 
-export function inview(node: HTMLElement, options: Options) {
+export function inview(node: HTMLElement, options: Options = {}) {
   const { root, rootMargin, threshold, unobserveOnEnter }: Options = {
     ...defaultOptions,
     ...options,
@@ -39,28 +42,26 @@ export function inview(node: HTMLElement, options: Options) {
         const unobserve = _observer.unobserve;
 
         entries.forEach((singleEntry) => {
-          const entry = singleEntry;
-
-          if (prevPos.y > entry.boundingClientRect.y) {
+          if (prevPos.y > singleEntry.boundingClientRect.y) {
             scrollDirection.vertical = 'up';
           } else {
             scrollDirection.vertical = 'down';
           }
 
-          if (prevPos.x > entry.boundingClientRect.x) {
+          if (prevPos.x > singleEntry.boundingClientRect.x) {
             scrollDirection.horizontal = 'left';
           } else {
             scrollDirection.horizontal = 'right';
           }
 
           prevPos = {
-            y: entry.boundingClientRect.y,
-            x: entry.boundingClientRect.x,
+            y: singleEntry.boundingClientRect.y,
+            x: singleEntry.boundingClientRect.x,
           };
 
-          const detail: Detail = {
-            inView: entry.isIntersecting,
-            entry,
+          const detail: ObserverEventDetails = {
+            inView: singleEntry.isIntersecting,
+            entry: singleEntry,
             scrollDirection,
             observe,
             unobserve,
@@ -68,7 +69,7 @@ export function inview(node: HTMLElement, options: Options) {
 
           node.dispatchEvent(createEvent('change', detail));
 
-          if (entry.isIntersecting) {
+          if (singleEntry.isIntersecting) {
             node.dispatchEvent(createEvent('enter', detail));
 
             unobserveOnEnter && _observer.unobserve(node);
@@ -84,7 +85,17 @@ export function inview(node: HTMLElement, options: Options) {
       }
     );
 
+    // This dispatcher has to be wrapped in setTimeout, as it won't work otherwise.
+    // Not sure why is it happening, maybe a callstack has to pass between the listeners?
+    // Definitely something to investigate to understand better.
+    setTimeout(() => {
+      node.dispatchEvent(
+        createEvent<LifecycleEventDetails>('init', { observer, node })
+      );
+    }, 0);
+
     observer.observe(node);
+
     return {
       destroy() {
         observer.unobserve(node);
