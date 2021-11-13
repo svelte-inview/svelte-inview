@@ -1,6 +1,6 @@
 {
   "name": "svelte-inview",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "description": "A Svelte action that monitors an element enters or leaves the viewport or a parent element. Performant and efficient thanks to using Intersection Observer under the hood.",
   "homepage": "https://github.com/maciekgrzybek/svelte-inview",
   "bugs": "https://github.com/maciekgrzybek/svelte-inview/issues",
