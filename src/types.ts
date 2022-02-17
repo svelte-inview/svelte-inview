@@ -24,8 +24,8 @@ export type ObserverEventDetails = {
   inView: boolean;
   entry: IntersectionObserverEntry;
   scrollDirection: ScrollDirection;
-  observe: (target: Element) => void;
-  unobserve: (target: Element) => void;
+  node: HTMLElement;
+  observer: IntersectionObserver;
 };
 
 export type LifecycleEventDetails = {

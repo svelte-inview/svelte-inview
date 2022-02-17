@@ -38,9 +38,6 @@ export function inview(node: HTMLElement, options: Options = {}) {
   if (typeof IntersectionObserver !== 'undefined' && node) {
     const observer = new IntersectionObserver(
       (entries, _observer) => {
-        const observe = _observer.observe;
-        const unobserve = _observer.unobserve;
-
         entries.forEach((singleEntry) => {
           if (prevPos.y > singleEntry.boundingClientRect.y) {
             scrollDirection.vertical = 'up';
@@ -63,8 +60,8 @@ export function inview(node: HTMLElement, options: Options = {}) {
             inView: singleEntry.isIntersecting,
             entry: singleEntry,
             scrollDirection,
-            observe,
-            unobserve,
+            node,
+            observer: _observer,
           };
 
           node.dispatchEvent(createEvent('change', detail));
