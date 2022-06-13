@@ -47,10 +47,10 @@ This is the most basic use case for `svelte-inview`. Just add the action to the 
 
 ```html
 
-<script>
+<script lang="ts">
   import { inview } from 'svelte-inview';
 
-  let isInView;
+  let isInView: boolean;
   const options = {};
 </script>
 
@@ -78,16 +78,17 @@ This is the most basic use case for `svelte-inview`. Just add the action to the 
 Svelte Inview lets you easily lazy load images. For a better UX we can pass a `rootMargin="50px"` props, so the image will be loaded when scroll is 50px before the viewport. After it appears in the viewport, you don't want to observe it anymore, hence the `unobserveOnEnter` props set to true.
 
 ```html
-<script>
+<script lang="ts">
   import { inview } from 'svelte-inview';
+  import type { ObserverEventDetails, Options } from 'svelte-inview';
 
   let isInView;
-  const options = {
+  const options: Options = {
     rootMargin: '50px',
     unobserveOnEnter: true,
   };
 
-  const handleChange = ({ detail }) => (isInView = detail.inView);
+  const handleChange = ({ detail }: CustomEvent<ObserverEventDetails>) => (isInView = detail.inView);
 </script>
 
 <div use:inview="{options}" on:change="{handleChange}">
@@ -104,11 +105,12 @@ Svelte Inview lets you easily lazy load images. For a better UX we can pass a `r
 You can play/pause a video when it's in/out of the viewport. Simply pass correct methods in `on:enter` and `on:leave` callbacks.
 
 ```html
-<script>
+<script lang="ts">
   import { inview } from 'svelte-inview';
+  import type { ObserverEventDetails } from 'svelte-inview';
 
-  let isInView;
-  let videoRef;
+  let isInView: boolean;
+  let videoRef: HTMLElement;
 </script>
 
   <div
@@ -128,17 +130,18 @@ You can also add some cool animations when an element enters the viewport. To ma
 
 ```html
 
-<script>
+<script lang="ts">
   import { inview } from 'svelte-inview';
+  import type { ObserverEventDetails, ScrollDirection, Options } from 'svelte-inview';
 
-  let isInView;
-  let scrollDirection;
-  const options = {
+  let isInView: boolean;
+  let scrollDirection: ScrollDirection;
+  const options: Options = {
     rootMargin: '-50px',
     unobserveOnEnter: true,
   };
 
-  const handleChange = ({ detail }) => {
+  const handleChange = ({ detail }: CustomEvent<ObserverEventDetails>) => {
     isInView = detail.inView;
     scrollDirection = detail.scrollDirection.vertical;
   };
@@ -146,7 +149,7 @@ You can also add some cool animations when an element enters the viewport. To ma
 
   <div use:inview={options} on:change={handleChange}>
     <div
-      class:animate={inView}
+      class:animate={isInView}
       class:animateFromBottom={scrollDirection === 'down'}
       class:animateFromTop={scrollDirection === 'top'}>
       Animate me!
