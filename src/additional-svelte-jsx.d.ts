@@ -22,11 +22,11 @@ type LifecycleEventDetails = {
   observer: IntersectionObserver;
 };
 
-declare namespace svelte.JSX {
-  interface HTMLProps<T> {
-    onchange?: (event: CustomEvent<ObserverEventDetails>) => void;
-    onenter?: (event: CustomEvent<ObserverEventDetails>) => void;
-    onleave?: (event: CustomEvent<ObserverEventDetails>) => void;
-    oninit?: (event: CustomEvent<LifecycleEventDetails>) => void;
+declare namespace svelteHTML {
+  interface HTMLAttributes<T> {
+    'on:change'?: (event: CustomEvent<ObserverEventDetails>) => void;
+    'on:enter'?: (event: CustomEvent<ObserverEventDetails>) => void;
+    'on:leave'?: (event: CustomEvent<ObserverEventDetails>) => void;
+    'on:init'?: (event: CustomEvent<LifecycleEventDetails>) => void;
   }
 }
