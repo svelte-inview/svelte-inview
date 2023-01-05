@@ -16,7 +16,10 @@
   "scripts": {
     "build": "rollup -c",
     "format": "prettier --write --plugin-search-dir=. *.js src/**/*.ts demo/**/*.svelte",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "start-server": "cd demo && npm start",
+    "test": "DEBUG=pw:webserver npx playwright test   ",
+    "ci": "start-server-and-test start-server http://localhost:5000 test"
   },
   "devDependencies": {
     "@playwright/test": "^1.29.1",
@@ -35,6 +38,7 @@
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-svelte": "^7.1.0",
     "rollup-plugin-typescript2": "^0.34.1",
+    "start-server-and-test": "^1.15.2",
     "svelte-check": "3.0.1",
     "svelte-preprocess": "^4.7.2",
     "typescript": "^4.2.4"
