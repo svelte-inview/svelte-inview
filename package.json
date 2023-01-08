@@ -15,17 +15,18 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup -c",
-    "format": "prettier --write --plugin-search-dir=. *.js src/**/*.ts demo/**/*.svelte",
+    "format": "prettier --write --plugin-search-dir=. **/*.svelte *.ts",
     "prepublishOnly": "npm run build",
-    "start-server": "cd demo && npm start",
-    "test": "DEBUG=pw:webserver npx playwright test   ",
-    "ci": "start-server-and-test start-server http://localhost:5000 test"
+    "start-server": "cd test-app && PORT=5555 npm run dev",
+    "test": "npx playwright test",
+    "test-app": " npm run build && start-server-and-test start-server http://localhost:5555 test"
   },
   "devDependencies": {
     "@playwright/test": "^1.29.1",
     "@rollup/plugin-node-resolve": "^11.2.1",
     "@rollup/plugin-typescript": "^8.2.1",
     "@tsconfig/svelte": "^1.0.10",
+    "@types/node": "^18.11.18",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.23.0",
     "eslint-config-prettier": "^8.1.0",
