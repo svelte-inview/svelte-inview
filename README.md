@@ -151,7 +151,7 @@ You can also add some cool animations when an element enters the viewport. To ma
     <div
       class:animate={isInView}
       class:animateFromBottom={scrollDirection === 'down'}
-      class:animateFromTop={scrollDirection === 'top'}>
+      class:animateFromTop={scrollDirection === 'up'}>
       Animate me!
     </div>
   </div>
