@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { inview } from '../../../dist';
+	import { inview } from 'svelte-inview';
 	import { createEventDispatcher } from 'svelte';
 
 	let ref: HTMLOrSVGElement;

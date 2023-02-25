@@ -17,6 +17,7 @@
     "build": "rollup -c",
     "format": "prettier --write --plugin-search-dir=. **/*.svelte *.ts",
     "prepublishOnly": "npm run build",
+    "build-test-app": "cd test-app && npm i && npm run build",
     "start-server": "cd test-app && PORT=5555 npm run dev",
     "test": "npx playwright test",
     "test-app": " npm run build && start-server-and-test start-server http://localhost:5555 test"
