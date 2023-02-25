@@ -4,7 +4,10 @@ A Svelte action that monitors an element enters or leaves the viewport/parent el
 
 <img src="https://raw.githubusercontent.com/maciekgrzybek/svelte-inview/master/demo/public/demo.gif" width="600px" align="center">
 
-🔥Check it out live [here](https://svelte-inview.netlify.app/)
+🔥 Check it out live [here](https://svelte-inview.netlify.app/)
+
+Support if you like it ☕ 🔥
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png)](https://www.buymeacoffee.com/maciekgrzybek)
 
 ## Why bother?
 
@@ -32,13 +35,17 @@ $ npm install --save svelte-inview
 ## Usage
 
 #### NOTE: Version 2 was returning `observe` and `unobserve` methods on the events. In version 3 they were removed, and the `observer` and `node` are being returned instead. So if you used those methods before like this:
+
 ```
 event.detail.observe(node);
 ```
+
 You'll need to change it to:
+
 ```
 event.detail.observer.observe(node);
 ```
+
 #### NOTE: Version 1 was using an `Inview` component. In version 2 that was changed to `action` - API is easier to consume, plus the obsolete wrapper is not longer needed. If you still want to use the component, [check the documentation for version 1](https://github.com/maciekgrzybek/svelte-inview/tree/v-1.0.0).
 
 ### Basic Use Case
@@ -88,7 +95,8 @@ Svelte Inview lets you easily lazy load images. For a better UX we can pass a `r
     unobserveOnEnter: true,
   };
 
-  const handleChange = ({ detail }: CustomEvent<ObserverEventDetails>) => (isInView = detail.inView);
+  const handleChange = ({ detail }: CustomEvent<ObserverEventDetails>) =>
+    (isInView = detail.inView);
 </script>
 
 <div use:inview="{options}" on:change="{handleChange}">
@@ -174,14 +182,14 @@ You can also add some cool animations when an element enters the viewport. To ma
 
 ### Observer events arguments
 
-| Name                       | Type                        | Description                                                                                                                                                      |
-| -------------------------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| inView                     | `boolean`                   | Visibility state of the target element. If it's `true`, target passed at least the value of the `threshold` props.                                               |
-| entry                      | `IntersectionObserverEntry` | [Intersection Observer entry object](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry) generated every time when IO callback is fired. |
-| scrollDirection.vertical   | `up` or `down`              | Vertical scrolling direction.                                                                                                                                    |
-| scrollDirection.horizontal | `left` or `right`           | Horizontal scrolling direction.                                                                                                                                  |
-| node     | `HTMLElement`          | Element that is being observed                                                                                                                                                                              |
-| observer | `IntersectionObserver` | [Intersection Observer instance](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver) for the observed element. Among others, it allows to "turn off" the observer at the very beginning. |
+| Name                       | Type                        | Description                                                                                                                                                                                                 |
+| -------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| inView                     | `boolean`                   | Visibility state of the target element. If it's `true`, target passed at least the value of the `threshold` props.                                                                                          |
+| entry                      | `IntersectionObserverEntry` | [Intersection Observer entry object](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry) generated every time when IO callback is fired.                                            |
+| scrollDirection.vertical   | `up` or `down`              | Vertical scrolling direction.                                                                                                                                                                               |
+| scrollDirection.horizontal | `left` or `right`           | Horizontal scrolling direction.                                                                                                                                                                             |
+| node                       | `HTMLElement`               | Element that is being observed                                                                                                                                                                              |
+| observer                   | `IntersectionObserver`      | [Intersection Observer instance](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver) for the observed element. Among others, it allows to "turn off" the observer at the very beginning. |
 
 ### Lifecycle events arguments
 
