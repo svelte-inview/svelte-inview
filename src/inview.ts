@@ -1,3 +1,4 @@
+import { tick } from 'svelte';
 import type {
   ObserverEventDetails,
   Options,
@@ -82,14 +83,11 @@ export function inview(node: HTMLElement, options: Options = {}) {
       }
     );
 
-    // This dispatcher has to be wrapped in setTimeout, as it won't work otherwise.
-    // Not sure why is it happening, maybe a callstack has to pass between the listeners?
-    // Definitely something to investigate to understand better.
-    setTimeout(() => {
+    tick().then(() => {
       node.dispatchEvent(
         createEvent<LifecycleEventDetails>('init', { observer, node })
       );
-    }, 0);
+    });
 
     observer.observe(node);
 
