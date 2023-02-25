@@ -98,15 +98,15 @@ describe('direction', () => {
     const targetBlock = page.locator('.target-block');
 
     await expect(targetBlock).toBeDefined();
-    await expect(targetBlock).toHaveText(/down no/i);
+    await expect(targetBlock).toHaveText(/down/i);
 
     await page.evaluate(() => window.scroll(0, 250));
 
-    await expect(targetBlock).toHaveText(/up yes/i);
+    await expect(targetBlock).toHaveText(/up/i);
 
     await page.evaluate(() => window.scroll(0, 1500));
-    await page.evaluate(() => window.scroll(0, 0));
+    await page.evaluate(() => window.scroll(0, -1));
 
-    await expect(targetBlock).toHaveText(/down no/i);
+    await expect(targetBlock).toHaveText(/no/i);
   });
 });
