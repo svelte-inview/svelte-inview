@@ -13,11 +13,11 @@
 	<div
 		class="target-block"
 		use:inview={inviewOptions}
-		on:leave={() => {
+		on:inview_leave={() => {
 			isInView = false;
 		}}
-		on:change={({ detail }) => (direction = detail.scrollDirection?.vertical ?? '')}
-		on:enter={() => {
+		on:inview_change={({ detail }) => (direction = detail.scrollDirection?.vertical ?? '')}
+		on:inview_enter={() => {
 			isInView = true;
 		}}
 	>
