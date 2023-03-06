@@ -65,13 +65,19 @@ export function inview(node: HTMLElement, options: Options = {}) {
             observer: _observer,
           };
 
+          node.dispatchEvent(createEvent('inview_change', detail));
+          //@ts-expect-error only for backward compatibility
           node.dispatchEvent(createEvent('change', detail));
 
           if (singleEntry.isIntersecting) {
+            node.dispatchEvent(createEvent('inview_enter', detail));
+            //@ts-expect-error only for backward compatibility
             node.dispatchEvent(createEvent('enter', detail));
 
             unobserveOnEnter && _observer.unobserve(node);
           } else {
+            node.dispatchEvent(createEvent('inview_leave', detail));
+            //@ts-expect-error only for backward compatibility
             node.dispatchEvent(createEvent('leave', detail));
           }
         });
@@ -85,6 +91,10 @@ export function inview(node: HTMLElement, options: Options = {}) {
 
     tick().then(() => {
       node.dispatchEvent(
+        createEvent<LifecycleEventDetails>('inview_init', { observer, node })
+      );
+      node.dispatchEvent(
+        //@ts-expect-error only for backward compatibility
         createEvent<LifecycleEventDetails>('init', { observer, node })
       );
     });

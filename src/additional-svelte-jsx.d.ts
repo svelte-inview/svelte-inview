@@ -24,9 +24,9 @@ type LifecycleEventDetails = {
 
 declare namespace svelteHTML {
   interface HTMLAttributes<T> {
-    'on:change'?: (event: CustomEvent<ObserverEventDetails>) => void;
-    'on:enter'?: (event: CustomEvent<ObserverEventDetails>) => void;
-    'on:leave'?: (event: CustomEvent<ObserverEventDetails>) => void;
-    'on:init'?: (event: CustomEvent<LifecycleEventDetails>) => void;
+    'on:inview_change'?: (event: CustomEvent<ObserverEventDetails>) => void;
+    'on:inview_enter'?: (event: CustomEvent<ObserverEventDetails>) => void;
+    'on:inview_leave'?: (event: CustomEvent<ObserverEventDetails>) => void;
+    'on:inview_init'?: (event: CustomEvent<LifecycleEventDetails>) => void;
   }
 }
