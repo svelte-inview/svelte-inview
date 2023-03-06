@@ -34,23 +34,9 @@ $ npm install --save svelte-inview
 
 ## Usage
 
-#### NOTE: Version 2 was returning `observe` and `unobserve` methods on the events. In version 3 they were removed, and the `observer` and `node` are being returned instead. So if you used those methods before like this:
-
-```
-event.detail.observe(node);
-```
-
-You'll need to change it to:
-
-```
-event.detail.observer.observe(node);
-```
-
-#### NOTE: Version 1 was using an `Inview` component. In version 2 that was changed to `action` - API is easier to consume, plus the obsolete wrapper is not longer needed. If you still want to use the component, [check the documentation for version 1](https://github.com/maciekgrzybek/svelte-inview/tree/v-1.0.0).
-
 ### Basic Use Case
 
-This is the most basic use case for `svelte-inview`. Just add the action to the element you want to track - `use:inview`. You can also pass other [configuration props](#props). You can see if the element is visible by checking the `inView` or from the inside of the callback method - `on:change`.
+This is the most basic use case for `svelte-inview`. Just add the action to the element you want to track - `use:inview`. You can also pass other [configuration props](#props). You can see if the element is visible by checking the `inView` or from the inside of the callback method - `on:inview_change`.
 
 ```html
 
@@ -63,19 +49,19 @@ This is the most basic use case for `svelte-inview`. Just add the action to the 
 
   <div
     use:inview={options}
-    on:change={(event) => {
+    on:inview_change={(event) => {
       const { inView, entry, scrollDirection, observer, node} = event.detail;
       isInView = inView;
     }}
-    on:enter={(event) => {
+    on:inview_enter={(event) => {
       const { inView, entry, scrollDirection, observer, node} = event.detail;
       isInView = inView;
     }}
-    on:leave={(event) => {
+    on:inview_leave={(event) => {
       const { inView, entry, scrollDirection, observer, node} = event.detail;
       isInView = inView;
     }}
-    on:init={(event) => {
+    on:inview_init={(event) => {
       const { observer, node } = event.detail;
     }}>{isInView ? 'Hey I am in the viewport' : 'Bye, Bye'}</div>
 ```
@@ -99,7 +85,7 @@ Svelte Inview lets you easily lazy load images. For a better UX we can pass a `r
     (isInView = detail.inView);
 </script>
 
-<div use:inview="{options}" on:change="{handleChange}">
+<div use:inview="{options}" on:inview_change="{handleChange}">
   {#if isInView}
   <img src="path/to/image.jpg" />
   {:else}
@@ -110,7 +96,7 @@ Svelte Inview lets you easily lazy load images. For a better UX we can pass a `r
 
 ### Video Control
 
-You can play/pause a video when it's in/out of the viewport. Simply pass correct methods in `on:enter` and `on:leave` callbacks.
+You can play/pause a video when it's in/out of the viewport. Simply pass correct methods in `on:inview_enter` and `on:inview_leave` callbacks.
 
 ```html
 <script lang="ts">
@@ -123,8 +109,8 @@ You can play/pause a video when it's in/out of the viewport. Simply pass correct
 
   <div
     use:inview
-    on:enter={() => videoRef.play()}
-    on:leave={() => videoRef.pause()}
+    on:inview_enter={() => videoRef.play()}
+    on:inview_leave={() => videoRef.pause()}
   >
     <video width="500" controls bind:this={videoRef}>
       <source src="path/to/video.mp4" type="video/mp4" />
@@ -155,7 +141,7 @@ You can also add some cool animations when an element enters the viewport. To ma
   };
 </script>
 
-  <div use:inview={options} on:change={handleChange}>
+  <div use:inview={options} on:inview_change={handleChange}>
     <div
       class:animate={isInView}
       class:animateFromBottom={scrollDirection === 'down'}
@@ -164,6 +150,44 @@ You can also add some cool animations when an element enters the viewport. To ma
     </div>
   </div>
 ```
+
+### Important information about breaking changes in previous versions
+
+#### Version 4 introduces new names for events. Before they were `'change' | 'leave' | 'enter' | 'init'`. In version 4 they're changed to `'inview_change' | 'inview_leave' | 'inview_enter' | 'inview_init'`.
+
+This change was needed to satisfy Typescript, as the package was messing up the default types coming from svelte typings.
+To ensure backward compatibility, the original events names will still work for some time, but they won't be properly recognized by Typescript.
+To sum up, this will still work, but TS won't be happy about it:
+
+```js
+on:change={(event) => {
+  const { inView, entry, scrollDirection, observer, node} = event.detail;
+  isInView = inView;
+}}
+```
+
+To make sure it works properly **and** satisfy TS you'll need to change it to this:
+
+```js
+on:inview_change={(event) => {
+  const { inView, entry, scrollDirection, observer, node} = event.detail;
+  isInView = inView;
+}}
+```
+
+#### Version 2 was returning `observe` and `unobserve` methods on the events. In version 3 they were removed, and the `observer` and `node` are being returned instead. So if you used those methods before like this:
+
+```js
+event.detail.observe(node);
+```
+
+You'll need to change it to:
+
+```js
+event.detail.observer.observe(node);
+```
+
+#### Version 1 was using an `Inview` component. In version 2 that was changed to `action` - API is easier to consume, plus the obsolete wrapper is not longer needed. If you still want to use the component, [check the documentation for version 1](https://github.com/maciekgrzybek/svelte-inview/tree/v-1.0.0).
 
 ## API
 
@@ -175,10 +199,10 @@ You can also add some cool animations when an element enters the viewport. To ma
 | options.rootMargin       | `string`               | `0px`    | Margin around the root element. Values similar to the CSS margin property, e.g. "10px 20px 30px 40px". Can also be a percentage. [See more](#usage-with-rootmargin).                                                                                                                                                                                                                                                                                                        | `false`  |
 | options.threshold        | `number` or `number[]` | `0`      | Either a single number or an array of numbers which indicate at what percentage of the target's visibility the observer's callback should be executed. If you only want to detect when visibility passes the 50% mark, you can use a value of 0.5. If you want the callback to run every time visibility passes another 25%, you would specify the array [0, 0.25, 0.5, 0.75, 1]. The default is 0 (meaning as soon as even one pixel is visible, the callback will be run) | `false`  |
 | options.unobserveOnEnter | `boolean`              | `false`  | If true, target element stops being observed after the first time it appears in the viewport. Can be used when you want to fire the callback only once.                                                                                                                                                                                                                                                                                                                     | `false`  |
-| on:change                | `function`             | -        | Event fired every time the target element meets the specified threshold. Receives `event` object as an argument. Inside of `event.detail` you can find all the arguments specified [here](#observer-events-arguments).                                                                                                                                                                                                                                                      | `false`  |
-| on:enter                 | `function`             | -        | Event fired every time the target element enters the viewport. Receives `event` object as an argument. Inside of `event.detail` you can find all the arguments specified [here](#observer-events-arguments) .                                                                                                                                                                                                                                                               | `false`  |
-| on:leave                 | `function`             | -        | Event fired every time the target element leaves the viewport. Receives `event` object as an argument. Inside of `event.detail` you can find all the arguments specified [here](#observer-events-arguments) .                                                                                                                                                                                                                                                               | `false`  |
-| on:init                  | `function`             | -        | Event fired on action initialization, before the observer starts observing the element. Receives lifecycle argumetns specified [here](#lifecycle-events-arguments)                                                                                                                                                                                                                                                                                                          | `false`  |
+| on:inview_change         | `function`             | -        | Event fired every time the target element meets the specified threshold. Receives `event` object as an argument. Inside of `event.detail` you can find all the arguments specified [here](#observer-events-arguments).                                                                                                                                                                                                                                                      | `false`  |
+| on:inview_enter          | `function`             | -        | Event fired every time the target element enters the viewport. Receives `event` object as an argument. Inside of `event.detail` you can find all the arguments specified [here](#observer-events-arguments) .                                                                                                                                                                                                                                                               | `false`  |
+| on:inview_leave          | `function`             | -        | Event fired every time the target element leaves the viewport. Receives `event` object as an argument. Inside of `event.detail` you can find all the arguments specified [here](#observer-events-arguments) .                                                                                                                                                                                                                                                               | `false`  |
+| on:inview_init           | `function`             | -        | Event fired on action initialization, before the observer starts observing the element. Receives lifecycle arguments specified [here](#lifecycle-events-arguments)                                                                                                                                                                                                                                                                                                          | `false`  |
 
 ### Observer events arguments
 
