@@ -1,4 +1,6 @@
-export type Event = 'change' | 'leave' | 'enter' | 'init';
+export type Prefix = 'inview';
+export type EventBase = 'change' | 'leave' | 'enter' | 'init';
+export type Event = `${Prefix}_${EventBase}`;
 
 export type Options = {
   root?: HTMLElement | null;
