@@ -232,7 +232,7 @@ If you want to increase or decrease the area of the root, just pass the `rootMar
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License. See [LICENSE](./license.md) for more information.
 
 ## Contact
 
