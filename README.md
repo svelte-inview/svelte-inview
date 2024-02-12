@@ -129,7 +129,7 @@ You can also add some cool animations when an element enters the viewport. To ma
   import type { ObserverEventDetails, ScrollDirection, Options } from 'svelte-inview';
 
   let isInView: boolean;
-  let scrollDirection: ScrollDirection;
+  let scrollDirection: Direction;
   const options: Options = {
     rootMargin: '-50px',
     unobserveOnEnter: true,
