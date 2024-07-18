@@ -1,4 +1,5 @@
 import { tick } from 'svelte';
+import type { ActionReturn } from 'svelte/action';
 import type {
   ObserverEventDetails,
   Options,
@@ -20,7 +21,24 @@ const createEvent = <T = ObserverEventDetails>(
   detail: T
 ): CustomEvent<T> => new CustomEvent(name, { detail });
 
-export function inview(node: HTMLElement, options: Options = {}) {
+interface Attributes {
+  // Backwards compatibility
+  'on:inview_change'?: (e: CustomEvent<ObserverEventDetails>) => void;
+  'on:inview_enter'?: (e: CustomEvent<ObserverEventDetails>) => void;
+  'on:inview_leave'?: (e: CustomEvent<ObserverEventDetails>) => void;
+  'on:inview_init'?: (e: CustomEvent<LifecycleEventDetails>) => void;
+
+  // Svelte5 Syntax
+  oninview_change?: (e: CustomEvent<ObserverEventDetails>) => void;
+  oninview_enter?: (e: CustomEvent<ObserverEventDetails>) => void;
+  oninview_leave?: (e: CustomEvent<ObserverEventDetails>) => void;
+  oninview_init?: (e: CustomEvent<LifecycleEventDetails>) => void;
+}
+
+export function inview(
+  node: HTMLElement,
+  options: Options = {}
+): ActionReturn<Options, Attributes> {
   const { root, rootMargin, threshold, unobserveOnEnter }: Options = {
     ...defaultOptions,
     ...options,
