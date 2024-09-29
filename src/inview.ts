@@ -1,4 +1,5 @@
 import { tick } from 'svelte';
+import type { ActionReturn } from 'svelte/action';
 import type {
   ObserverEventDetails,
   Options,
@@ -6,6 +7,7 @@ import type {
   ScrollDirection,
   Event,
   LifecycleEventDetails,
+  Attributes,
 } from './types';
 
 const defaultOptions: Options = {
@@ -20,7 +22,10 @@ const createEvent = <T = ObserverEventDetails>(
   detail: T
 ): CustomEvent<T> => new CustomEvent(name, { detail });
 
-export function inview(node: HTMLElement, options: Options = {}) {
+export function inview(
+  node: HTMLElement,
+  options: Options = {}
+): ActionReturn<Options, Attributes> {
   const { root, rootMargin, threshold, unobserveOnEnter }: Options = {
     ...defaultOptions,
     ...options,
