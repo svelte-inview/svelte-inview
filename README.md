@@ -36,7 +36,7 @@ $ npm install --save svelte-inview
 
 ### Basic Use Case
 
-This is the most basic use case for `svelte-inview`. Just add the action to the element you want to track - `use:inview`. You can also pass other [configuration props](#props). You can see if the element is visible by checking the `inView` or from the inside of the callback method - `on:inview_change`.
+This is the most basic use case for `svelte-inview`. Just add the action to the element you want to track - `use:inview`. You can also pass other [configuration props](#props). You can see if the element is visible by checking the `inView` flag from `on:inview_change` (Svelte 3 and 4) or `oninview_change` (Svelte 5).
 
 ```html
 
@@ -64,6 +64,40 @@ This is the most basic use case for `svelte-inview`. Just add the action to the 
     on:inview_init={(event) => {
       const { observer, node } = event.detail;
     }}>{isInView ? 'Hey I am in the viewport' : 'Bye, Bye'}</div>
+```
+
+### Svelte 5
+
+In Svelte 5 the same events are element attributes. `event.detail` is unchanged.
+
+```html
+<script lang="ts">
+  import { inview } from 'svelte-inview';
+
+  let isInView = $state(false);
+  const options = {};
+</script>
+
+<div
+  use:inview={options}
+  oninview_change={(event) => {
+    const { inView, entry, scrollDirection, observer, node } = event.detail;
+    isInView = inView;
+  }}
+  oninview_enter={(event) => {
+    const { inView, entry, scrollDirection, observer, node } = event.detail;
+    isInView = inView;
+  }}
+  oninview_leave={(event) => {
+    const { inView, entry, scrollDirection, observer, node } = event.detail;
+    isInView = inView;
+  }}
+  oninview_init={(event) => {
+    const { observer, node } = event.detail;
+  }}
+>
+  {isInView ? 'Hey I am in the viewport' : 'Bye, Bye'}
+</div>
 ```
 
 ### Lazy Loading Images
@@ -195,14 +229,14 @@ event.detail.observer.observe(node);
 
 | Name                     | Type                   | Default  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | Required |
 | ------------------------ | ---------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| options.root             | `HTMLElement`          | `window` | The element that is used as the viewport for checking visibility of the target. Must be the ancestor of the target.                                                                                                                                                                                                                                                                                                                                                         | `false`  |
+| options.root             | `HTMLElement`          | `null`   | The element that is used as the viewport for checking visibility of the target. Must be the ancestor of the target. `null` uses the browser viewport.                                                                                                                                                                                                                                                                                                                       | `false`  |
 | options.rootMargin       | `string`               | `0px`    | Margin around the root element. Values similar to the CSS margin property, e.g. "10px 20px 30px 40px". Can also be a percentage. [See more](#usage-with-rootmargin).                                                                                                                                                                                                                                                                                                        | `false`  |
 | options.threshold        | `number` or `number[]` | `0`      | Either a single number or an array of numbers which indicate at what percentage of the target's visibility the observer's callback should be executed. If you only want to detect when visibility passes the 50% mark, you can use a value of 0.5. If you want the callback to run every time visibility passes another 25%, you would specify the array [0, 0.25, 0.5, 0.75, 1]. The default is 0 (meaning as soon as even one pixel is visible, the callback will be run) | `false`  |
 | options.unobserveOnEnter | `boolean`              | `false`  | If true, target element stops being observed after the first time it appears in the viewport. Can be used when you want to fire the callback only once.                                                                                                                                                                                                                                                                                                                     | `false`  |
 | on:inview_change         | `function`             | -        | Event fired every time the target element meets the specified threshold. Receives `event` object as an argument. Inside of `event.detail` you can find all the arguments specified [here](#observer-events-arguments).                                                                                                                                                                                                                                                      | `false`  |
 | on:inview_enter          | `function`             | -        | Event fired every time the target element enters the viewport. Receives `event` object as an argument. Inside of `event.detail` you can find all the arguments specified [here](#observer-events-arguments) .                                                                                                                                                                                                                                                               | `false`  |
 | on:inview_leave          | `function`             | -        | Event fired every time the target element leaves the viewport. Receives `event` object as an argument. Inside of `event.detail` you can find all the arguments specified [here](#observer-events-arguments) .                                                                                                                                                                                                                                                               | `false`  |
-| on:inview_init           | `function`             | -        | Event fired on action initialization, before the observer starts observing the element. Receives lifecycle arguments specified [here](#lifecycle-events-arguments)                                                                                                                                                                                                                                                                                                          | `false`  |
+| on:inview_init           | `function`             | -        | Event fired on action initialization, before the observer starts observing the element. Receives lifecycle arguments specified [here](#lifecycle-events-arguments). In Svelte 5 these four handlers are `oninview_change`, `oninview_enter`, `oninview_leave`, and `oninview_init`.                                                                                                                                                                                       | `false`  |
 
 ### Observer events arguments
 
