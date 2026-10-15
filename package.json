@@ -13,6 +13,13 @@
   "module": "dist/index.mjs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "rollup -c",
     "format": "prettier --write --plugin-search-dir=. **/*.svelte *.ts",
@@ -23,7 +30,7 @@
     "test-app": " npm run build && start-server-and-test start-server http://localhost:5555 test"
   },
   "devDependencies": {
-    "@playwright/test": "^1.29.1",
+    "@playwright/test": "^1.64.1",
     "@rollup/plugin-node-resolve": "^11.2.1",
     "@rollup/plugin-typescript": "^8.2.1",
     "@tsconfig/svelte": "^1.0.10",
@@ -95,6 +102,6 @@
     }
   },
   "peerDependencies": {
-    "svelte": "^3.0.0 || ^4.0.0 || ^5.0.0 || ^5.0.0-next"
+    "svelte": "^3.0.0 || ^4.0.0 || ^5.0.0"
   }
 }
