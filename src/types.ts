@@ -14,7 +14,6 @@ export type Position = {
   y?: number;
 };
 
-// Types below needs to be manually copied to additional-svelte.jsx.d.ts file - more details there
 type Direction = 'up' | 'down' | 'left' | 'right';
 
 export type ScrollDirection = {
