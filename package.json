@@ -13,6 +13,13 @@
   "module": "dist/index.mjs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "rollup -c",
     "format": "prettier --write --plugin-search-dir=. **/*.svelte *.ts",
@@ -95,6 +102,6 @@
     }
   },
   "peerDependencies": {
-    "svelte": "^3.0.0 || ^4.0.0 || ^5.0.0 || ^5.0.0-next"
+    "svelte": "^3.0.0 || ^4.0.0 || ^5.0.0"
   }
 }
