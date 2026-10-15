@@ -1,0 +1,13 @@
+{
+  "name": "svelte-inview-typecheck-58",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync": "node sync-types.mjs",
+    "check": "npm run sync && tsc --noEmit --pretty false"
+  },
+  "devDependencies": {
+    "svelte": "^5.57.2",
+    "typescript": "^5.9.3"
+  }
+}
