@@ -19,7 +19,7 @@
 			oninview_init={() => {
 				initCount += 1;
 			}}
-		></div>
+		/>
 	{/if}
 	<p class="init-count" data-testid="init-count">{initCount}</p>
 </div>
