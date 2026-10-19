@@ -1,0 +1,11 @@
+node_modules
+dist
+.rpt2_cache
+demo/.netlify
+demo/node_modules
+demo/.svelte-kit
+test-app/node_modules
+test-app/.svelte-kit
+test-app/build
+playwright-report
+test-results

@@ -4,6 +4,7 @@
   "exclude": ["node_modules/*", "dist/*"],
   "compilerOptions": {
     "declaration": true,
-    "types": ["node"]
+    "types": ["node"],
+    "strict": false
   }
 }
