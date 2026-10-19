@@ -9,7 +9,7 @@
 </script>
 
 <div>
-	<div class="initial-block" />
+	<div class="initial-block"></div>
 	<div
 		class="target-block"
 		use:inview={inviewOptions}

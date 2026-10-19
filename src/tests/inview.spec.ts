@@ -92,6 +92,26 @@ describe('custom settings', () => {
   });
 });
 
+describe('svelte 5 event handlers', () => {
+  test('updates the element through oninview_enter and oninview_leave', async ({
+    page,
+  }) => {
+    await page.goto('/svelte5-events');
+    const targetBlock = page.locator('.target-block');
+
+    await expect(targetBlock).toBeDefined();
+    await expect(targetBlock).toHaveText(/no/i);
+
+    await page.evaluate(() => window.scroll(0, 150));
+
+    await expect(targetBlock).toHaveText(/yes/i);
+
+    await page.evaluate(() => window.scroll(0, 1500));
+
+    await expect(targetBlock).toHaveText(/no/i);
+  });
+});
+
 describe('direction', () => {
   test('shows the correct direction', async ({ page }) => {
     await page.goto('/direction');
