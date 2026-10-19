@@ -1,9 +1,13 @@
-<svelte:options accessors={true} />
-
 <script lang="ts">
-	export let direction = 'up';
-	export let active: boolean;
-	export let ref: HTMLOrSVGElement;
+	let {
+		direction = 'up',
+		active,
+		ref = $bindable()
+	}: {
+		direction?: string;
+		active: boolean;
+		ref?: SVGSVGElement;
+	} = $props();
 </script>
 
 {#if direction === 'up'}

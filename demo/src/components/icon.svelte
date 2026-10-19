@@ -1,23 +1,30 @@
 <script lang="ts">
 	import { inview } from 'svelte-inview';
-	import { createEventDispatcher } from 'svelte';
 
-	let ref: HTMLOrSVGElement;
-	export let icon: string;
+	type EntryDetail = {
+		icon: string;
+		verticalDirection: 'up' | 'down' | 'left' | 'right';
+	};
 
-	const dispatch = createEventDispatcher();
+	let {
+		icon,
+		onentry
+	}: {
+		icon: string;
+		onentry?: (detail: EntryDetail) => void;
+	} = $props();
 </script>
 
 <div
 	class="icon-wrapper"
 	use:inview={{ threshold: 0.5 }}
-	on:enter={({ detail }) =>
-		dispatch('entry', {
-			verticalDirection: detail.scrollDirection.vertical,
-			icon
-		})}
+	oninview_enter={({ detail }) => {
+		const verticalDirection = detail.scrollDirection.vertical;
+		if (!verticalDirection) return;
+		onentry?.({ verticalDirection, icon });
+	}}
 >
-	<img src={`icons/${icon}.svg`} alt={icon} bind:this={ref} />
+	<img src={`icons/${icon}.svg`} alt={icon} />
 </div>
 
 <style>

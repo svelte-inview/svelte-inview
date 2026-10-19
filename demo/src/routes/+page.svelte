@@ -4,12 +4,12 @@
 
 	const icons = ['caravan', 'hammock', 'ice-cream', 'island', 'snorkel', 'sunglasses'];
 
-	let current = icons[0];
-	let direction: Direction;
-	let arrowUp: any;
-	let arrowDown: any;
+	let current = $state(icons[0]);
+	let direction = $state<'up' | 'down' | undefined>(undefined);
+	let arrowUp = $state<SVGSVGElement | undefined>(undefined);
+	let arrowDown = $state<SVGSVGElement | undefined>(undefined);
 
-	const animateArrow = (el: HTMLElement) => {
+	const animateArrow = (el: Element) => {
 		el.animate(
 			[
 				{ transform: 'translate3d(0, 0, 0)' },
@@ -21,13 +21,18 @@
 		);
 	};
 
-	const handleEntry = ({ detail }: { detail: { icon: string; verticalDirection: Direction } }) => {
+	const handleEntry = (detail: {
+		icon: string;
+		verticalDirection: 'up' | 'down' | 'left' | 'right';
+	}) => {
 		current = detail.icon;
-		direction = detail.verticalDirection;
-		if (detail.verticalDirection === 'up') {
-			animateArrow(arrowUp.ref);
-		} else {
-			animateArrow(arrowDown.ref);
+		if (detail.verticalDirection === 'up' || detail.verticalDirection === 'down') {
+			direction = detail.verticalDirection;
+		}
+		if (detail.verticalDirection === 'up' && arrowUp) {
+			animateArrow(arrowUp);
+		} else if (arrowDown) {
+			animateArrow(arrowDown);
 		}
 	};
 </script>
@@ -37,14 +42,14 @@
 		<div class="text-wrapper">
 			<span>Currently on the screen:</span>
 			<img src={`icons/${current}.svg`} class="small-icon" alt={current} />
-			<Arrow active={direction === 'up'} bind:this={arrowUp} />
-			<Arrow direction="down" active={direction === 'down'} bind:this={arrowDown} />
+			<Arrow active={direction === 'up'} bind:ref={arrowUp} />
+			<Arrow direction="down" active={direction === 'down'} bind:ref={arrowDown} />
 		</div>
 	</div>
 </div>
 
-{#each icons as icon}
-	<Icon {icon} on:entry={handleEntry} />
+{#each icons as icon (icon)}
+	<Icon {icon} onentry={handleEntry} />
 {/each}
 
 <a href="https://github.com/maciekgrzybek/svelte-inview" class="github" target="_blank">
