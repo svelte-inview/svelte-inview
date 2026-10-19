@@ -22,27 +22,50 @@ const createEvent = <T = ObserverEventDetails>(
   detail: T
 ): CustomEvent<T> => new CustomEvent(name, { detail });
 
+const resolveOptions = (options: Options = {}): Options => ({
+  ...defaultOptions,
+  ...options,
+});
+
+const optionsChanged = (a: Options, b: Options): boolean =>
+  a.root !== b.root ||
+  a.rootMargin !== b.rootMargin ||
+  a.threshold !== b.threshold ||
+  a.unobserveOnEnter !== b.unobserveOnEnter;
+
 export function inview(
   node: HTMLElement,
   options: Options = {}
 ): ActionReturn<Options, Attributes> {
-  const { root, rootMargin, threshold, unobserveOnEnter }: Options = {
-    ...defaultOptions,
-    ...options,
-  };
+  let generation = 0;
+  let currentOptions = resolveOptions(options);
+  let observer: IntersectionObserver | undefined;
 
-  let prevPos: Position = {
+  const prevPos: Position = {
     x: undefined,
     y: undefined,
   };
 
-  let scrollDirection: ScrollDirection = {
+  const scrollDirection: ScrollDirection = {
     vertical: undefined,
     horizontal: undefined,
   };
 
-  if (typeof IntersectionObserver !== 'undefined' && node) {
-    const observer = new IntersectionObserver(
+  const cancelPendingInit = () => {
+    generation += 1;
+  };
+
+  const destroyObserver = () => {
+    cancelPendingInit();
+    observer?.disconnect();
+    observer = undefined;
+  };
+
+  const createObserver = () => {
+    const { root, rootMargin, threshold, unobserveOnEnter } = currentOptions;
+    const initGeneration = generation;
+
+    observer = new IntersectionObserver(
       (entries, _observer) => {
         entries.forEach((singleEntry) => {
           if (prevPos.y > singleEntry.boundingClientRect.y) {
@@ -57,10 +80,8 @@ export function inview(
             scrollDirection.horizontal = 'right';
           }
 
-          prevPos = {
-            y: singleEntry.boundingClientRect.y,
-            x: singleEntry.boundingClientRect.x,
-          };
+          prevPos.y = singleEntry.boundingClientRect.y;
+          prevPos.x = singleEntry.boundingClientRect.x;
 
           const detail: ObserverEventDetails = {
             inView: singleEntry.isIntersecting,
@@ -95,6 +116,10 @@ export function inview(
     );
 
     tick().then(() => {
+      if (initGeneration !== generation) {
+        return;
+      }
+
       node.dispatchEvent(
         createEvent<LifecycleEventDetails>('inview_init', { observer, node })
       );
@@ -105,10 +130,25 @@ export function inview(
     });
 
     observer.observe(node);
+  };
+
+  if (typeof IntersectionObserver !== 'undefined' && node) {
+    createObserver();
 
     return {
+      update(newOptions: Options = {}) {
+        const nextOptions = resolveOptions(newOptions);
+
+        if (!optionsChanged(currentOptions, nextOptions)) {
+          return;
+        }
+
+        currentOptions = nextOptions;
+        destroyObserver();
+        createObserver();
+      },
       destroy() {
-        observer.unobserve(node);
+        destroyObserver();
       },
     };
   }
