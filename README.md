@@ -187,27 +187,29 @@ You can also add some cool animations when an element enters the viewport. To ma
 
 ### Important information about breaking changes in previous versions
 
-#### Version 4 introduces new names for events. Before they were `'change' | 'leave' | 'enter' | 'init'`. In version 4 they're changed to `'inview_change' | 'inview_leave' | 'inview_enter' | 'inview_init'`.
+#### Version 5 removes legacy event names
 
-This change was needed to satisfy Typescript, as the package was messing up the default types coming from svelte typings.
-To ensure backward compatibility, the original events names will still work for some time, but they won't be properly recognized by Typescript.
-To sum up, this will still work, but TS won't be happy about it:
+Version 4 renamed events to `'inview_change' | 'inview_leave' | 'inview_enter' | 'inview_init'` so they work correctly with TypeScript and Svelte typings. Version 5 drops the old names `'change'`, `'leave'`, `'enter'`, and `'init'` entirely.
 
-```js
-on:change={(event) => {
-  const { inView, entry, scrollDirection, observer, node} = event.detail;
-  isInView = inView;
-}}
-```
-
-To make sure it works properly **and** satisfy TS you'll need to change it to this:
+If you still listen for the legacy names, migrate to the `inview_*` events:
 
 ```js
+// Svelte 3 and 4
 on:inview_change={(event) => {
-  const { inView, entry, scrollDirection, observer, node} = event.detail;
+  const { inView, entry, scrollDirection, observer, node } = event.detail;
   isInView = inView;
 }}
 ```
+
+```js
+// Svelte 5
+oninview_change={(event) => {
+  const { inView, entry, scrollDirection, observer, node } = event.detail;
+  isInView = inView;
+}}
+```
+
+Use `on:inview_enter`, `on:inview_leave`, and `on:inview_init` (or `oninview_enter`, `oninview_leave`, and `oninview_init` in Svelte 5) the same way.
 
 #### Version 2 was returning `observe` and `unobserve` methods on the events. In version 3 they were removed, and the `observer` and `node` are being returned instead. So if you used those methods before like this:
 
