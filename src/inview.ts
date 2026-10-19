@@ -33,7 +33,11 @@ const optionsChanged = (a: Options, b: Options): boolean =>
   a.threshold !== b.threshold ||
   a.unobserveOnEnter !== b.unobserveOnEnter;
 
-export function inview(
+export type InviewAttachment = (
+  element: Element
+) => void | (() => void);
+
+function inviewAction(
   node: HTMLElement,
   options: Options = {}
 ): ActionReturn<Options, Attributes> {
@@ -152,4 +156,28 @@ export function inview(
       },
     };
   }
+}
+
+export function inview(
+  node: HTMLElement,
+  options?: Options
+): ActionReturn<Options, Attributes>;
+export function inview(options?: Options): InviewAttachment;
+export function inview(
+  nodeOrOptions?: HTMLElement | Options,
+  maybeOptions?: Options
+): ActionReturn<Options, Attributes> | InviewAttachment | undefined {
+  if (nodeOrOptions instanceof HTMLElement) {
+    return inviewAction(nodeOrOptions, maybeOptions);
+  }
+
+  const options = (nodeOrOptions ?? {}) as Options;
+
+  return (element) => {
+    const actionReturn = inviewAction(element as HTMLElement, options);
+
+    return () => {
+      actionReturn?.destroy?.();
+    };
+  };
 }

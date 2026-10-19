@@ -92,6 +92,42 @@ describe('custom settings', () => {
   });
 });
 
+describe('svelte 5 attachment', () => {
+  test('updates the element when it enters and leaves the viewport', async ({
+    page,
+  }) => {
+    await page.goto('/attachment');
+    const targetBlock = page.locator('.target-block');
+
+    await expect(targetBlock).toHaveText(/no/i);
+
+    await page.evaluate(() => window.scroll(0, 150));
+
+    await expect(targetBlock).toHaveText(/yes/i);
+
+    await page.evaluate(() => window.scroll(0, 1500));
+
+    await expect(targetBlock).toHaveText(/no/i);
+  });
+
+  test('recreates the observer when rootMargin changes through the attachment', async ({
+    page,
+  }) => {
+    await page.goto('/attachment-option-update');
+    const targetBlock = page.locator('.target-block');
+
+    await expect(targetBlock).toHaveText(/no/i);
+
+    await page.evaluate(() => window.scroll(0, 150));
+
+    await expect(targetBlock).toHaveText(/no/i);
+
+    await page.getByTestId('apply-zero-margin').click();
+
+    await expect(targetBlock).toHaveText(/yes/i);
+  });
+});
+
 describe('svelte 5 event handlers', () => {
   test('updates the element through oninview_enter and oninview_leave', async ({
     page,
@@ -146,11 +182,13 @@ describe('direction', () => {
     const targetBlock = page.locator('.target-block');
 
     await expect(targetBlock).toBeDefined();
-    await expect(targetBlock).toHaveText(/down/i);
+    await expect(targetBlock).toHaveText(/no/i);
+    await expect(targetBlock).not.toHaveText(/down/i);
 
     await page.evaluate(() => window.scroll(0, 250));
 
     await expect(targetBlock).toHaveText(/up/i);
+    await expect(page.getByTestId('first-scroll-vertical')).toHaveText('');
 
     await page.evaluate(() => window.scroll(0, 1500));
     await page.evaluate(() => window.scroll(0, -1));

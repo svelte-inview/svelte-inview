@@ -100,6 +100,33 @@ In Svelte 5 the same events are element attributes. `event.detail` is unchanged.
 </div>
 ```
 
+### Svelte 5 attachments
+
+`{@attach inview(options)}` requires **Svelte 5.29 or newer**. The `use:inview` action still supports Svelte 3, 4, and 5.
+
+When `options` is reactive state, Svelte re-runs the attachment when it changes; the previous observer is torn down and a new one is created with the updated options.
+
+```html
+<script lang="ts">
+  import { inview } from 'svelte-inview';
+
+  let isInView = $state(false);
+  const options = {};
+</script>
+
+<div
+  {@attach inview(options)}
+  oninview_enter={() => {
+    isInView = true;
+  }}
+  oninview_leave={() => {
+    isInView = false;
+  }}
+>
+  {isInView ? 'Hey I am in the viewport' : 'Bye, Bye'}
+</div>
+```
+
 ### Lazy Loading Images
 
 Svelte Inview lets you easily lazy load images. For a better UX we can pass a `rootMargin="50px"` props, so the image will be loaded when scroll is 50px before the viewport. After it appears in the viewport, you don't want to observe it anymore, hence the `unobserveOnEnter` props set to true.
