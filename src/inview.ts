@@ -68,16 +68,25 @@ export function inview(
     observer = new IntersectionObserver(
       (entries, _observer) => {
         entries.forEach((singleEntry) => {
-          if (prevPos.y > singleEntry.boundingClientRect.y) {
-            scrollDirection.vertical = 'up';
-          } else {
-            scrollDirection.vertical = 'down';
+          const scrollDirection: ScrollDirection = {
+            vertical: undefined,
+            horizontal: undefined,
+          };
+
+          if (prevPos.y !== undefined) {
+            if (prevPos.y > singleEntry.boundingClientRect.y) {
+              scrollDirection.vertical = 'up';
+            } else {
+              scrollDirection.vertical = 'down';
+            }
           }
 
-          if (prevPos.x > singleEntry.boundingClientRect.x) {
-            scrollDirection.horizontal = 'left';
-          } else {
-            scrollDirection.horizontal = 'right';
+          if (prevPos.x !== undefined) {
+            if (prevPos.x > singleEntry.boundingClientRect.x) {
+              scrollDirection.horizontal = 'left';
+            } else {
+              scrollDirection.horizontal = 'right';
+            }
           }
 
           prevPos.y = singleEntry.boundingClientRect.y;

@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { inview } from '../../../dist';
-	import type { Options } from '../../../dist';
+	import type { Options, ScrollDirection } from '../../../dist';
 
 	export let inviewOptions: Options = {};
 	export let showDirection = false;
 	let isInView = false;
 	let direction: string;
+	let firstScrollDirection: ScrollDirection | undefined;
 </script>
 
 <div>
@@ -16,13 +17,22 @@
 		on:inview_leave={() => {
 			isInView = false;
 		}}
-		on:inview_change={({ detail }) => (direction = detail.scrollDirection?.vertical ?? '')}
+		on:inview_change={({ detail }) => {
+			direction = detail.scrollDirection?.vertical ?? '';
+			if (!firstScrollDirection) {
+				firstScrollDirection = detail.scrollDirection;
+			}
+		}}
 		on:inview_enter={() => {
 			isInView = true;
 		}}
 	>
 		{#if showDirection}
 			{direction}
+			<span data-testid="first-scroll-vertical">{firstScrollDirection?.vertical ?? ''}</span>
+			{#if firstScrollDirection}
+				<span data-testid="first-observation" hidden>done</span>
+			{/if}
 		{/if}
 
 		{#if isInView}

@@ -112,7 +112,6 @@ describe('svelte 5 event handlers', () => {
   });
 });
 
-
 describe('action lifecycle', () => {
   test('recreates the observer when rootMargin changes', async ({ page }) => {
     await page.goto('/option-update');
@@ -146,11 +145,14 @@ describe('direction', () => {
     const targetBlock = page.locator('.target-block');
 
     await expect(targetBlock).toBeDefined();
-    await expect(targetBlock).toHaveText(/down/i);
+    await expect(targetBlock).toHaveText(/no/i);
+    await expect(targetBlock).not.toHaveText(/down/i);
+    await expect(page.getByTestId('first-observation')).toHaveText('done');
 
     await page.evaluate(() => window.scroll(0, 250));
 
     await expect(targetBlock).toHaveText(/up/i);
+    await expect(page.getByTestId('first-scroll-vertical')).toHaveText('');
 
     await page.evaluate(() => window.scroll(0, 1500));
     await page.evaluate(() => window.scroll(0, -1));
