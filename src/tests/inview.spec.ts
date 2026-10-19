@@ -112,6 +112,34 @@ describe('svelte 5 event handlers', () => {
   });
 });
 
+
+describe('action lifecycle', () => {
+  test('recreates the observer when rootMargin changes', async ({ page }) => {
+    await page.goto('/option-update');
+    const targetBlock = page.locator('.target-block');
+
+    await expect(targetBlock).toHaveText(/no/i);
+
+    await page.evaluate(() => window.scroll(0, 150));
+
+    await expect(targetBlock).toHaveText(/no/i);
+
+    await page.getByTestId('apply-zero-margin').click();
+
+    await expect(targetBlock).toHaveText(/yes/i);
+  });
+
+  test('destroy cancels a pending inview_init event', async ({ page }) => {
+    await page.goto('/init-cancel');
+
+    await expect(page.getByTestId('init-count')).toHaveText('0');
+
+    await page.waitForTimeout(50);
+
+    await expect(page.getByTestId('init-count')).toHaveText('0');
+  });
+});
+
 describe('direction', () => {
   test('shows the correct direction', async ({ page }) => {
     await page.goto('/direction');
