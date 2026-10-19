@@ -46,11 +46,6 @@ export function inview(
     y: undefined,
   };
 
-  const scrollDirection: ScrollDirection = {
-    vertical: undefined,
-    horizontal: undefined,
-  };
-
   const cancelPendingInit = () => {
     generation += 1;
   };
